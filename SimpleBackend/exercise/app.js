@@ -1,20 +1,20 @@
 const express = require('express');
 const router = express.Router();
 var app = express();
-var fs = require("fs");
-var request=require('request');
+var fs = require('fs');
+var request = require('request');
 
 router.get('/calc/:operand', (req, res, next) => {
     result_message = 0.0;
-    if(req.param('first') == null && req.param('second')==null){
+    if(req.query.first == null && req.query.second==null){
         result_message = 'Missing both parameters'
-    } else if(req.param('first')==null){
+    } else if(req.query.first==null){
         result_message = 'Missing first required parameter';
-    } else if(req.param('second')==null){
+    } else if(req.query.second ==null){
         result_message = 'Missing second required parameter';
     } else {
-        var first = parseInt(req.param('first'));
-        var second = parseInt(req.param('second'));
+        var first = parseInt(req.query.first);
+        var second = parseInt(req.query.second);
         switch(req.params.operand){
             case 'add':
                 result_message = (first+second).toFixed(3);
@@ -38,8 +38,9 @@ router.get('/calc/:operand', (req, res, next) => {
 router.get('/vappu/gettime', (req, res, next) => {
     // Vappu time 01.05.2019 00:00:00
     var vappu = new Date(2019, 4, 1, 0, 0, 0, 0);
+    var now = Date.now();
     res.status(200).json({
-        message: Math.floor((vappu-now)/1e3)
+        seconds: Math.floor((vappu-now)/1e3)
     });
 });
 
